@@ -41,9 +41,16 @@ const Navbar = () => {
             </button>
             <Link
               to="/"
-              className="ml-2 text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent"
+              className="ml-2 flex items-center"
             >
-              SUNATION
+              <img 
+                src="https://i.ibb.co.com/MDs4hfD4/logo1-01.png" 
+                alt="Sunation Logo"
+                className="h-8 w-8 mr-2"
+              />
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
+                SUNATION
+              </span>
             </Link>
           </div>
 
