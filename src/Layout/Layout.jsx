@@ -3,22 +3,23 @@ import Navbar from '../components/Navbar';
 import { Outlet } from 'react-router';
 import Footer from '../components/Footer';
 
+
 const Layout = () => {
-    return (
-        <div>
-           <header>
-            <Navbar> </Navbar>
-           </header>
+  return (
+    <div className="flex flex-col min-h-screen">
+      <header>
+        <Navbar />
+      </header>
 
-           <main className='container mx-auto px-4 h-screen'>
-            <Outlet></Outlet>
-           </main>
+      <main className="flex-grow mx-auto px-4">
+        <Outlet />
+      </main>
 
-           <footer>
-            <Footer> </Footer>
-           </footer>
-        </div>
-    );
+      <footer>
+        <Footer />
+      </footer>
+    </div>
+  );
 };
 
 export default Layout;

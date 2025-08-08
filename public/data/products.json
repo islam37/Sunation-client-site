@@ -1,0 +1,32 @@
+{
+  "categories": ["All", "Hoodies", "T-Shirts", "Shirts", "Pants", "Caps"],
+  "featuredProducts": [
+    {
+      "id": 1,
+      "name": "Premium Cotton Hoodie",
+      "category": "Hoodies",
+      "price": 59.99,
+      "rating": 4.8,
+      "image": "https://i.ibb.co.com/N61s1dtM/hoodi.jpg",
+      "description": "Soft cotton hoodie with premium stitching"
+    },
+    {
+      "id": 2,
+      "name": "Classic White T-Shirt",
+      "category": "T-Shirts",
+      "price": 29.99,
+      "rating": 4.5,
+      "image": "https://i.ibb.co.com/SXNQLGzK/handsome-adult-male-waiting-bus.jpg",
+      "description": "100% cotton essential tee"
+    }
+  ],
+  "promotions": [
+    {
+      "title": "Summer Sale",
+      "subtitle": "Up to 40% off selected items",
+      "cta": "Shop Now",
+      "target": "/summer-sale",
+      "background": "bg-gradient-to-r from-cyan-500 to-blue-600"
+    }
+  ]
+}
