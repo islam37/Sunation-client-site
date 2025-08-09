@@ -206,12 +206,7 @@ const Home = () => {
               >
                 Explore Collection <FiArrowRight className="ml-2 animate-pulse" />
               </Link>
-              <Link 
-                to="/new-arrivals" 
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:bg-opacity-10 transition-all backdrop-blur-sm"
-              >
-                Limited Editions
-              </Link>
+              
             </motion.div>
           </div>
         </div>
