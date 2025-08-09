@@ -1,12 +1,28 @@
-import { useState } from "react";
-import { FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiLogIn } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiLogIn, FiChevronDown } from "react-icons/fi";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isScrolled, setIsScrolled] = useState(false);
+ const [searchQuery, setSearchQuery] = useState(""); // empty string as initial value
+  const location = useLocation();
 
-  // Categories from your project proposal
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
+  // Navbar scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Categories for dropdown
   const categories = [
     { name: "Hoodies", path: "/shop/hoodies" },
     { name: "T-Shirts", path: "/shop/t-shirts" },
@@ -27,28 +43,24 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+    <nav className={`mb-5 fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-white/80 backdrop-blur-sm"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Mobile menu button and logo */}
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo & Mobile Menu Button */}
           <div className="flex items-center">
             <button
-              className="lg:hidden p-2 rounded-md text-gray-700 hover:text-blue-600"
+              className="lg:hidden p-2 rounded-md text-gray-700 hover:text-amber-600 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
-            <Link
-              to="/"
-              className="ml-2 flex items-center"
-            >
+            <Link to="/" className="ml-2 flex items-center group">
               <img 
                 src="https://i.ibb.co.com/MDs4hfD4/logo1-01.png" 
-                alt="Sunation Logo"
-                className="h-8 w-8 mr-2"
+                alt="Luxury Brand Logo"
+                className="h-10 w-10 mr-2 transition-transform group-hover:rotate-12 duration-500"
               />
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent">
                 SUNATION
               </span>
             </Link>
@@ -58,19 +70,24 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => (
               <div key={link.name} className="relative group">
-                <Link
-                  to={link.path}
-                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                >
-                  {link.name}
-                </Link>
+                <div className="flex items-center">
+                  <Link
+                    to={link.path}
+                    className="text-gray-800 hover:text-amber-600 font-medium transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                  {link.dropdown && (
+                    <FiChevronDown className="ml-1 text-gray-500 group-hover:text-amber-600 transition-colors" />
+                  )}
+                </div>
                 {link.dropdown && (
-                  <div className="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-48 z-50 border border-gray-100">
+                  <div className="absolute hidden group-hover:block bg-white/95 backdrop-blur-lg shadow-xl rounded-lg mt-2 py-2 w-48 z-50 border border-gray-100 animate-fadeIn">
                     {link.dropdown.map((category) => (
                       <Link
                         key={category.name}
                         to={category.path}
-                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                        className="block px-4 py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-600 transition-colors"
                       >
                         {category.name}
                       </Link>
@@ -84,15 +101,15 @@ const Navbar = () => {
           {/* Search, Auth, Cart */}
           <div className="flex items-center space-x-4">
             {/* Search Bar (Desktop) */}
-            <div className="hidden md:flex items-center bg-gray-100 rounded-full px-3 py-1">
+            <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 transition-all duration-300 hover:bg-gray-200/80">
               <input
                 type="text"
                 placeholder="Search products..."
-                className="bg-transparent outline-none w-40 text-sm"
+                className="bg-transparent outline-none w-40 text-sm placeholder-gray-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <FiSearch className="text-gray-500 ml-2" />
+              <FiSearch className="text-gray-500 ml-2 hover:text-amber-600 transition-colors" />
             </div>
 
             {/* Auth Buttons (Desktop) */}
@@ -100,13 +117,13 @@ const Navbar = () => {
               <div className="hidden md:flex space-x-2">
                 <Link
                   to="/login"
-                  className="px-3 py-1 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-full flex items-center"
+                  className="px-4 py-2 text-sm font-medium text-amber-600 hover:bg-amber-50 rounded-full flex items-center transition-colors"
                 >
                   <FiLogIn className="mr-1" /> Login
                 </Link>
                 <Link
                   to="/register"
-                  className="px-3 py-1 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-full"
+                  className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-amber-600 to-amber-400 text-white hover:from-amber-700 hover:to-amber-500 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   Register
                 </Link>
@@ -114,34 +131,34 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/profile"
-                className="p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100"
+                className="p-2 text-gray-700 hover:text-amber-600 rounded-full hover:bg-amber-50 transition-colors"
               >
                 <FiUser size={20} />
               </Link>
             )}
 
-            {/* Shopping Cart */}
+            {/* Shopping Cart (With Floating Badge) */}
             <Link
               to="/cart"
-              className="p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 relative"
+              className="p-2 text-gray-700 hover:text-amber-600 rounded-full hover:bg-amber-50 transition-colors relative"
             >
               <FiShoppingCart size={20} />
-              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
                 0
               </span>
             </Link>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu (Slides In) */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-white py-4 px-4 shadow-lg rounded-b-lg">
+          <div className="lg:hidden bg-white/95 backdrop-blur-lg shadow-xl rounded-b-lg py-4 px-4 animate-slideDown">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
                 <div key={link.name}>
                   <Link
                     to={link.path}
-                    className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+                    className="block py-2 text-gray-800 hover:text-amber-600 font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {link.name}
@@ -152,7 +169,7 @@ const Navbar = () => {
                         <Link
                           key={category.name}
                           to={category.path}
-                          className="block py-1 text-gray-600 hover:text-blue-600"
+                          className="block py-1 text-gray-600 hover:text-amber-600 transition-colors"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {category.name}
@@ -164,19 +181,19 @@ const Navbar = () => {
               ))}
 
               {/* Mobile Auth Buttons */}
-              <div className="pt-2 border-t border-gray-200">
+              <div className="pt-4 border-t border-gray-200">
                 {!isLoggedIn ? (
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-3">
                     <Link
                       to="/login"
-                      className="w-full py-2 text-center text-blue-600 font-medium rounded-lg hover:bg-blue-50"
+                      className="w-full py-2 text-center text-amber-600 font-medium rounded-lg hover:bg-amber-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Login
                     </Link>
                     <Link
                       to="/register"
-                      className="w-full py-2 text-center bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
+                      className="w-full py-2 text-center bg-gradient-to-r from-amber-600 to-amber-400 text-white font-medium rounded-lg hover:from-amber-700 hover:to-amber-500 transition-all duration-300 shadow-md hover:shadow-lg"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Register
@@ -185,7 +202,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     to="/profile"
-                    className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
+                    className="block py-2 text-gray-800 hover:text-amber-600 font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     My Profile
@@ -195,15 +212,15 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Search Bar */}
-            <div className="mt-4 flex items-center bg-gray-100 rounded-full px-3 py-2">
+            <div className="mt-4 flex items-center bg-gray-100 rounded-full px-4 py-2 transition-all duration-300 hover:bg-gray-200/80">
               <input
                 type="text"
                 placeholder="Search products..."
-                className="bg-transparent outline-none w-full text-sm"
+                className="bg-transparent outline-none w-full text-sm placeholder-gray-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <FiSearch className="text-gray-500 ml-2" />
+              <FiSearch className="text-gray-500 ml-2 hover:text-amber-600 transition-colors" />
             </div>
           </div>
         )}

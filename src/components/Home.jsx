@@ -4,10 +4,11 @@ import {
   FiShoppingCart, 
   FiGrid, 
   FiStar,
-  FiTrendingUp
+  FiArrowRight
 } from 'react-icons/fi';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -15,99 +16,114 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [showAllFeatured, setShowAllFeatured] = useState(false);
 
-  // Color palette for pie chart
   const COLORS = ['#3B82F6', '#6366F1', '#8B5CF6', '#A855F7', '#D946EF'];
 
+  // Complete product data
+  const allProducts = [
+    {
+      id: 1,
+      name: 'Premium Cotton Hoodie',
+      category: 'Hoodies',
+      price: 59.99,
+      rating: 4.8,
+      image: 'https://i.ibb.co.com/N61s1dtM/hoodi.jpg',
+      isNew: true,
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: ['Black', 'Gray', 'Navy']
+    },
+    {
+      id: 2,
+      name: 'Classic White T-Shirt',
+      category: 'T-Shirts',
+      price: 29.99,
+      rating: 4.5,
+      image: 'https://i.ibb.co.com/SXNQLGzK/handsome-adult-male-waiting-bus.jpg',
+      isNew: false,
+      sizes: ['XS', 'S', 'M', 'L', 'XL'],
+      colors: ['White', 'Black', 'Gray']
+    },
+    {
+      id: 3,
+      name: 'Slim Fit Chino Pants',
+      category: 'Pants',
+      price: 49.99,
+      rating: 4.7,
+      image: 'https://izod.com/cdn/shop/files/IZAGC14R_250_a_600x.jpg?v=1714490308',
+      isNew: true,
+      sizes: ['28', '30', '32', '34', '36'],
+      colors: ['Khaki', 'Navy', 'Black']
+    },
+    {
+      id: 4,
+      name: 'Signature Snapback Cap',
+      category: 'Caps',
+      price: 24.99,
+      rating: 4.3,
+      image: 'https://mosscotton.com/wp-content/uploads/2018/09/mockup_Front_Maroon-510x510.jpg',
+      isNew: false,
+      sizes: ['One Size'],
+      colors: ['Black', 'Navy', 'Red']
+    },
+    {
+      id: 5,
+      name: 'Denim Jacket',
+      category: 'Jackets',
+      price: 79.99,
+      rating: 4.9,
+      image: 'https://artisanclick.com/wp-content/uploads/2021/09/369-scaled.jpg',
+      isNew: true,
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: ['Blue', 'Black']
+    },
+    {
+      id: 6,
+      name: 'Casual Linen Shirt',
+      category: 'Shirts',
+      price: 39.99,
+      rating: 4.6,
+      image: 'https://camixa.com.au/cdn/shop/products/Casual_Fit_TULUM_Linen_Shirt_LS-21-Olive-green.jpg?v=1677557910&width=1080',
+      isNew: false,
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: ['White', 'Blue', 'Olive']
+    },
+    {
+      id: 7,
+      name: 'Jogger Sweatpants',
+      category: 'Pants',
+      price: 44.99,
+      rating: 4.4,
+      image: 'https://m.media-amazon.com/images/I/71jk-WJxgoL._AC_SY500_.jpg',
+      isNew: false,
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: ['Black', 'Gray', 'Navy']
+    },
+    {
+      id: 8,
+      name: 'Beanie Hat',
+      category: 'Accessories',
+      price: 19.99,
+      rating: 4.2,
+      image: 'https://heatholders.co.uk/cdn/shop/products/BLACKHALDENHAT.jpg?v=1663925370&width=1024',
+      isNew: true,
+      sizes: ['One Size'],
+      colors: ['Black', 'Gray', 'Navy']
+    }
+  ];
+
+  const categories = [
+    { name: 'Hoodies', value: 35 },
+    { name: 'T-Shirts', value: 28 },
+    { name: 'Pants', value: 22 },
+    { name: 'Caps', value: 12 },
+    { name: 'Accessories', value: 3 }
+  ];
+
   useEffect(() => {
-    // Simulate API fetch
     const fetchData = async () => {
       try {
-        // Mock products data with your provided URLs
-        const products = [
-          {
-            id: 1,
-            name: 'Premium Cotton Hoodie',
-            category: 'Hoodies',
-            price: 59.99,
-            rating: 4.8,
-            image: 'https://i.ibb.co.com/N61s1dtM/hoodi.jpg',
-            isNew: true
-          },
-          {
-            id: 2,
-            name: 'Classic White T-Shirt',
-            category: 'T-Shirts',
-            price: 29.99,
-            rating: 4.5,
-            image: 'https://i.ibb.co.com/SXNQLGzK/handsome-adult-male-waiting-bus.jpg',
-            isNew: false
-          },
-          {
-            id: 3,
-            name: 'Slim Fit Chino Pants',
-            category: 'Pants',
-            price: 49.99,
-            rating: 4.7,
-            image: 'https://izod.com/cdn/shop/files/IZAGC14R_250_a_600x.jpg?v=1714490308',
-            isNew: true
-          },
-          {
-            id: 4,
-            name: 'Signature Snapback Cap',
-            category: 'Caps',
-            price: 24.99,
-            rating: 4.3,
-            image: 'https://mosscotton.com/wp-content/uploads/2018/09/mockup_Front_Maroon-510x510.jpg',
-            isNew: false
-          },
-          {
-            id: 5,
-            name: 'Denim Jacket',
-            category: 'Jackets',
-            price: 79.99,
-            rating: 4.9,
-            image: 'https://artisanclick.com/wp-content/uploads/2021/09/369-scaled.jpg',
-            isNew: true
-          },
-          {
-            id: 6,
-            name: 'Casual Linen Shirt',
-            category: 'Shirts',
-            price: 39.99,
-            rating: 4.6,
-            image: 'https://camixa.com.au/cdn/shop/products/Casual_Fit_TULUM_Linen_Shirt_LS-21-Olive-green.jpg?v=1677557910&width=1080',
-            isNew: false
-          },
-          {
-            id: 7,
-            name: 'Jogger Sweatpants',
-            category: 'Pants',
-            price: 44.99,
-            rating: 4.4,
-            image: 'https://m.media-amazon.com/images/I/71jk-WJxgoL._AC_SY500_.jpg',
-            isNew: false
-          },
-          {
-            id: 8,
-            name: 'Beanie Hat',
-            category: 'Accessories',
-            price: 19.99,
-            rating: 4.2,
-            image: 'https://heatholders.co.uk/cdn/shop/products/BLACKHALDENHAT.jpg?v=1663925370&width=1024',
-            isNew: true
-          }
-        ];
-
-        // Mock category distribution data
-        const categories = [
-          { name: 'Hoodies', value: 35 },
-          { name: 'T-Shirts', value: 28 },
-          { name: 'Pants', value: 22 },
-          { name: 'Caps', value: 12 },
-          { name: 'Accessories', value: 3 }
-        ];
-
-        setFeaturedProducts(products);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+        setFeaturedProducts(allProducts);
         setCategoryData(categories);
         setLoading(false);
       } catch (error) {
@@ -119,98 +135,169 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // Show only 4 products initially, or all if showAllFeatured is true
-  const displayedProducts = showAllFeatured 
-    ? featuredProducts 
-    : featuredProducts.slice(0, 4);
+  const displayedProducts = showAllFeatured ? featuredProducts : featuredProducts.slice(0, 4);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-          <p className="text-gray-600">Loading our premium collections...</p>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"
+          />
+          <motion.p
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: 1 }}
+            transition={{ repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
+            className="text-gray-600"
+          >
+            Loading our premium collections...
+          </motion.p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-hidden">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-900 to-indigo-800 text-white py-32 overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/texture.png')]"></div>
-        <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Elevate Your <span className="text-blue-300">Style</span>
-          </h1>
-          <p className="text-xl max-w-2xl mx-auto mb-8">
-            Discover premium men's fashion curated for the modern gentleman
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link 
-              to="/shop" 
-              className="inline-flex items-center justify-center px-8 py-3 bg-white text-blue-900 font-medium rounded-lg hover:bg-gray-100 transition-all shadow-lg"
+      <div className="relative h-[600px] w-full overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ 
+            backgroundImage: "url('https://i.ibb.co.com/TBcMxysQ/Chat-GPT-Image-Aug-9-2025-10-41-35-AM.png')",
+            backgroundBlendMode: 'overlay',
+            backgroundColor: 'rgba(0,0,0,0.4)'
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+        </div>
+        
+        <div className="relative z-10 h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-6 text-center w-full">
+            <motion.h1 
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="text-5xl md:text-6xl font-bold mb-6 text-white tracking-tight"
             >
-              Shop Collection <FiChevronRight className="ml-2" />
-            </Link>
-            <Link 
-              to="/new-arrivals" 
-              className="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:bg-opacity-10 transition-all"
+              Elevate Your <span className="text-amber-400">Style</span> Essence
+            </motion.h1>
+            
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-xl md:text-2xl max-w-3xl mx-auto mb-10 text-gray-200 font-light"
             >
-              New Arrivals
-            </Link>
+              Curated luxury fashion for the modern connoisseur
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="flex flex-col sm:flex-row justify-center gap-5"
+            >
+              <Link 
+                to="/shop" 
+                className="inline-flex items-center justify-center px-8 py-4 bg-amber-500 text-black font-medium rounded-lg hover:bg-amber-400 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                Explore Collection <FiArrowRight className="ml-2 animate-pulse" />
+              </Link>
+              <Link 
+                to="/new-arrivals" 
+                className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:bg-opacity-10 transition-all backdrop-blur-sm"
+              >
+                Limited Editions
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>
 
       {/* Featured Products Section */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4 md:mb-0">
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+      <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-16">
+          <motion.h2 
+            initial={{ x: -20, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl font-bold text-gray-900 mb-6 md:mb-0"
+          >
+            <span className="bg-gradient-to-r from-amber-500 to-amber-300 bg-clip-text text-transparent">
               Curated Collections
             </span>
-          </h2>
+          </motion.h2>
+          
           {!showAllFeatured && (
-            <button 
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setShowAllFeatured(true)}
-              className="flex items-center text-blue-600 hover:text-blue-800 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+              className="flex items-center text-amber-600 hover:text-amber-800 font-medium px-5 py-3 rounded-lg hover:bg-amber-50 transition-colors border border-amber-200"
             >
               <FiGrid className="mr-2" />
               View All Products
-            </button>
+            </motion.button>
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {displayedProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {displayedProducts.map((product, index) => (
+            <motion.div
+              key={product.id}
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <ProductCard product={product} />
+            </motion.div>
           ))}
         </div>
 
         {showAllFeatured && (
-          <div className="mt-12 text-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-16 text-center"
+          >
             <Link 
               to="/shop" 
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-400 text-black font-medium rounded-lg hover:from-amber-600 hover:to-amber-500 transition-all shadow-lg hover:shadow-xl"
             >
               Explore Full Collection <FiChevronRight className="ml-2" />
             </Link>
-          </div>
+          </motion.div>
         )}
       </div>
 
-      {/* Category Distribution Pie Chart Section */}
-      <div className="bg-white py-16">
+      {/* Category Distribution Section */}
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 py-24 text-white">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Our Product Categories
+          <motion.h2 
+            initial={{ y: -20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-4xl font-bold text-center mb-16"
+          >
+            <span className="bg-gradient-to-r from-amber-400 to-amber-200 bg-clip-text text-transparent">
+              Our Product Universe
             </span>
-          </h2>
-          <div className="flex flex-col lg:flex-row items-center justify-between">
-            <div className="w-full lg:w-1/2 h-96">
+          </motion.h2>
+          
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <motion.div 
+              initial={{ x: -50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="w-full lg:w-1/2 h-[400px] bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700"
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -218,58 +305,73 @@ const Home = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    outerRadius={120}
-                    innerRadius={60}
-                    paddingAngle={5}
+                    outerRadius={140}
+                    innerRadius={70}
+                    paddingAngle={2}
                     dataKey="value"
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
                     {categoryData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[index % COLORS.length]} 
+                        stroke="rgba(0,0,0,0.3)"
+                        strokeWidth={2}
+                      />
                     ))}
                   </Pie>
                   <Tooltip 
-                    formatter={(value) => [`${value}%`, 'Market Share']}
                     contentStyle={{
-                      background: 'rgba(255, 255, 255, 0.96)',
-                      borderRadius: '0.5rem',
-                      border: 'none',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                      padding: '0.75rem'
+                      background: 'rgba(0,0,0,0.8)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(4px)',
+                      color: 'white'
                     }}
                   />
-                  <Legend />
+                  <Legend 
+                    wrapperStyle={{ bottom: -20 }}
+                    formatter={(value) => <span className="text-gray-300">{value}</span>}
+                  />
                 </PieChart>
               </ResponsiveContainer>
-            </div>
-            <div className="w-full lg:w-1/2 mt-8 lg:mt-0 lg:pl-12">
-              <h3 className="text-xl font-bold mb-6 text-gray-900">Top Categories</h3>
-              <div className="space-y-4">
+            </motion.div>
+            
+            <motion.div 
+              initial={{ x: 50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="w-full lg:w-1/2 bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700"
+            >
+              <h3 className="text-2xl font-bold mb-8 text-amber-300">Category Breakdown</h3>
+              <div className="space-y-6">
                 {categoryData.map((category, index) => (
                   <div key={category.name} className="flex items-center">
                     <div 
-                      className="w-4 h-4 rounded-full mr-3" 
+                      className="w-5 h-5 rounded-full mr-4 shadow-md" 
                       style={{ backgroundColor: COLORS[index] }}
                     />
                     <div className="flex-1">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-gray-700 font-medium">{category.name}</span>
-                        <span className="font-bold">{category.value}%</span>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-200 font-medium">{category.name}</span>
+                        <span className="font-bold text-white">{category.value}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="h-2 rounded-full" 
-                          style={{ 
-                            width: `${category.value}%`,
-                            backgroundColor: COLORS[index]
-                          }}
+                      <div className="w-full bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${category.value}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: index * 0.2 }}
+                          className="h-full rounded-full"
+                          style={{ backgroundColor: COLORS[index] }}
                         />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -279,56 +381,59 @@ const Home = () => {
 
 // Product Card Component
 const ProductCard = ({ product }) => (
-  <div className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-blue-100">
-    <div className="relative h-64 overflow-hidden">
+  <motion.div
+    whileHover={{ y: -10 }}
+    className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-amber-100 relative"
+  >
+    <div className="relative h-80 overflow-hidden">
       <img 
         src={product.image} 
         alt={product.name}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        onError={(e) => {
-          e.target.onerror = null; 
-          e.target.src = '/images/placeholder-product.jpg';
-        }}
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
       {product.isNew && (
-        <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+        <div className="absolute top-4 right-4 bg-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full shadow-md">
           NEW
         </div>
       )}
-      <button className="absolute bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 py-2 bg-white text-blue-600 rounded-full shadow-md hover:bg-blue-50 flex items-center">
+      <motion.button 
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute bottom-5 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-5 py-2.5 bg-amber-500 text-black rounded-full shadow-lg hover:bg-amber-400 flex items-center font-medium"
+      >
         <FiShoppingCart className="mr-2" />
         Add to Cart
-      </button>
+      </motion.button>
     </div>
-    <div className="p-4">
-      <span className="text-xs font-medium text-blue-600 uppercase tracking-wider">
+    <div className="p-5">
+      <span className="text-xs font-medium text-amber-600 uppercase tracking-wider">
         {product.category}
       </span>
-      <h3 className="text-lg font-semibold mt-1 mb-2 text-gray-900">
+      <h3 className="text-xl font-semibold mt-1 mb-3 text-gray-900 group-hover:text-amber-600 transition-colors">
         {product.name}
       </h3>
-      <div className="flex items-center mb-2">
-        <div className="flex text-yellow-400">
+      <div className="flex items-center mb-3">
+        <div className="flex text-amber-400">
           {[...Array(5)].map((_, i) => (
             <FiStar 
               key={i} 
               className={i < Math.floor(product.rating) ? 'fill-current' : ''} 
-              size={14}
+              size={16}
             />
           ))}
         </div>
-        <span className="text-gray-500 text-sm ml-1">({product.rating})</span>
+        <span className="text-gray-500 text-sm ml-2">({product.rating})</span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-sm text-gray-500 line-through mr-2">
+        <span className="text-sm text-gray-400 line-through">
           ${(product.price * 1.2).toFixed(2)}
         </span>
-        <span className="text-blue-600 font-bold">
+        <span className="text-amber-600 font-bold text-lg">
           ${product.price.toFixed(2)}
         </span>
       </div>
     </div>
-  </div>
+  </motion.div>
 );
 
 export default Home;
