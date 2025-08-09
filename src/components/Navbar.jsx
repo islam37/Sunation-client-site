@@ -34,9 +34,9 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop", dropdown: categories },
-    { name: "New Arrivals", path: "/new" },
-    { name: "Sale", path: "/sale" },
+    // { name: "New Arrivals", path: "/new" },
     { name: "About", path: "/about" },
+    {name: "Contact Us", path: "/contact" },
   ];
 
   // Simulated auth state (replace with real auth later)

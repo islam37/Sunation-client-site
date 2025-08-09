@@ -12,6 +12,7 @@ import UserProfile from "../components/UserProfile";
 import OrderHistory from "../components/OrderHistory";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import About from "../components/About";
+import ContactUs from "../components/ContactUs";
 
 export const router = createBrowserRouter([
   {
@@ -23,61 +24,29 @@ export const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
-      
-      
       {
         path: "shop",
         children: [
-          {
-            index: true,
-            element: <Shop />,
-          },
-          {
-            path: ":category", 
-            element: <Shop />,
-          },
+          { index: true, element: <Shop /> },
+          { path: ":category", element: <Shop /> },
         ],
       },
       {
-        path: "product/:productId", 
+        path: "product/:productId",
         element: <ProductDetails />,
       },
+      { path: "cart", element: <Cart /> },
+      { path: "checkout", element: <Checkout /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "profile", element: <UserProfile /> },
+      { path: "orders", element: <OrderHistory /> },
+      { path: "admin", element: <AdminDashboard /> },
+      { path: "about", element: <About /> },
       {
-        path: "cart",
-        element: <Cart />,
+      path: "contact",element : <ContactUs></ContactUs>
       },
-      {
-        path: "checkout",
-        element: <Checkout />, 
-      },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-      },
-      {
-        path: "profile",
-        element: <UserProfile />, 
-      },
-      {
-        path: "orders",
-        element: <OrderHistory />, 
-      },
-      {
-        path: "admin",
-        element: <AdminDashboard />, 
-      },
-      {
-        path: '/about',
-        Component: About
-      },
-      {
-        path: "*",
-        element: <ErrorPage />,
-      },
+      { path: "*", element: <ErrorPage /> },
     ],
   },
 ]);
